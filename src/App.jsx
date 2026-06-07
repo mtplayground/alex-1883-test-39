@@ -1,14 +1,6 @@
-import { useReducer } from 'react'
-import { CalculatorDisplay } from './components/CalculatorDisplay'
-import { CalculatorKeypad } from './components/CalculatorKeypad'
-import { INITIAL_CALCULATOR_STATE, calculatorReducer } from './lib/calculatorReducer'
+import { Calculator } from './components/Calculator'
 
 function App() {
-  const [calculatorState, dispatch] = useReducer(
-    calculatorReducer,
-    INITIAL_CALCULATOR_STATE,
-  )
-
   return (
     <main className="min-h-screen bg-slate-50 px-6 py-12 text-slate-800">
       <section className="mx-auto grid min-h-[calc(100vh-6rem)] max-w-5xl items-center gap-8 md:grid-cols-[1fr_360px]">
@@ -24,12 +16,8 @@ function App() {
             build, and preview commands ready to use.
           </p>
         </div>
-        <div className="grid w-full max-w-sm gap-4 justify-self-center md:justify-self-end">
-          <CalculatorDisplay
-            currentEntry={calculatorState.currentEntry}
-            error={calculatorState.error}
-          />
-          <CalculatorKeypad onAction={dispatch} />
+        <div className="w-full max-w-sm justify-self-center md:justify-self-end">
+          <Calculator />
         </div>
       </section>
     </main>
