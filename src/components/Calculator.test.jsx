@@ -47,6 +47,31 @@ describe('Calculator', () => {
     expect(displayText()).toBe('19')
   })
 
+  it('renders calculated results from physical keyboard input', () => {
+    render(<Calculator />)
+
+    fireEvent.keyDown(window, { key: '9' })
+    fireEvent.keyDown(window, { key: '-' })
+    fireEvent.keyDown(window, { key: '4' })
+    fireEvent.keyDown(window, { key: 'Enter' })
+
+    expect(displayText()).toBe('5')
+  })
+
+  it('supports Backspace and Escape from physical keyboard input', () => {
+    render(<Calculator />)
+
+    fireEvent.keyDown(window, { key: '1' })
+    fireEvent.keyDown(window, { key: '2' })
+    fireEvent.keyDown(window, { key: 'Backspace' })
+
+    expect(displayText()).toBe('1')
+
+    fireEvent.keyDown(window, { key: 'Escape' })
+
+    expect(displayText()).toBe('0')
+  })
+
   it('renders engine errors from keypad actions', () => {
     render(<Calculator />)
 
