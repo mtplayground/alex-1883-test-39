@@ -1,8 +1,13 @@
 export const ARITHMETIC_ERRORS = {
   DIVISION_BY_ZERO: 'DIVISION_BY_ZERO',
+  OVERFLOW: 'OVERFLOW',
 }
 
 function success(value) {
+  if (!Number.isFinite(value)) {
+    return failure(ARITHMETIC_ERRORS.OVERFLOW, 'Result is too large.')
+  }
+
   return {
     ok: true,
     value,

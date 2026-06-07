@@ -50,6 +50,17 @@ describe('arithmetic', () => {
     })
   })
 
+  it('returns an error state for overflowing results', () => {
+    expect(multiply(Number.MAX_VALUE, 2)).toEqual({
+      ok: false,
+      value: null,
+      error: {
+        code: ARITHMETIC_ERRORS.OVERFLOW,
+        message: 'Result is too large.',
+      },
+    })
+  })
+
   it('divides the left number by the right number', () => {
     expect(divide(7, 2)).toEqual({
       ok: true,

@@ -34,6 +34,12 @@ describe('calculatorReducer', () => {
     expect(state.pendingOperator).toBeNull()
   })
 
+  it('keeps leading zero input normalized', () => {
+    const state = reduceActions([digit('0'), digit('0'), digit('5')])
+
+    expect(state.currentEntry).toBe('5')
+  })
+
   it('ignores invalid digit input', () => {
     const state = reduceActions([digit('4'), digit('x'), digit('2')])
 
@@ -123,6 +129,18 @@ describe('calculatorReducer', () => {
     ])
 
     expect(state.currentEntry).toBe('5')
+  })
+
+  it('uses only the last repeated operator before the next entry', () => {
+    const state = reduceActions([
+      digit('8'),
+      operator(OPERATORS.ADD),
+      operator(OPERATORS.MULTIPLY),
+      digit('3'),
+      { type: CALCULATOR_ACTIONS.CALCULATE },
+    ])
+
+    expect(state.currentEntry).toBe('24')
   })
 
   it('keeps calculate as a no-op when there is no pending operator', () => {
@@ -227,6 +245,29 @@ describe('calculatorReducer', () => {
       error: {
         code: ARITHMETIC_ERRORS.DIVISION_BY_ZERO,
         message: 'Cannot divide by zero.',
+      },
+    })
+  })
+
+  it('returns an error state for arithmetic overflow', () => {
+    const overflowState = {
+      ...INITIAL_CALCULATOR_STATE,
+      currentEntry: String(Number.MAX_VALUE),
+      accumulator: Number.MAX_VALUE,
+      pendingOperator: OPERATORS.MULTIPLY,
+      shouldReplaceEntry: true,
+    }
+
+    const state = calculatorReducer(overflowState, digit('2'))
+    const resultState = calculatorReducer(state, {
+      type: CALCULATOR_ACTIONS.CALCULATE,
+    })
+
+    expect(resultState).toMatchObject({
+      currentEntry: 'Error',
+      error: {
+        code: ARITHMETIC_ERRORS.OVERFLOW,
+        message: 'Result is too large.',
       },
     })
   })
