@@ -10,8 +10,8 @@ function App() {
             alex-1883-test-39
           </h1>
           <p className="max-w-2xl text-lg leading-8 text-slate-600">
-            A working React application scaffold with local development,
-            production build, and preview commands ready to use.
+            A working React application scaffold with local development, production
+            build, and preview commands ready to use.
           </p>
         </div>
       </section>

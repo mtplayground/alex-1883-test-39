@@ -8,5 +8,7 @@ React application scaffolded with Vite and styled with Tailwind CSS.
 npm install
 npm run dev
 npm run build
+npm run lint
+npm run format:check
 npm run preview
 ```
