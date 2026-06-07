@@ -135,6 +135,25 @@ describe('calculatorReducer', () => {
     })
   })
 
+  it('deletes the last digit from the current entry', () => {
+    const state = reduceActions([
+      digit('4'),
+      digit('2'),
+      { type: CALCULATOR_ACTIONS.DELETE_LAST_DIGIT },
+    ])
+
+    expect(state.currentEntry).toBe('4')
+  })
+
+  it('deletes back to zero instead of an empty entry', () => {
+    const state = reduceActions([
+      digit('4'),
+      { type: CALCULATOR_ACTIONS.DELETE_LAST_DIGIT },
+    ])
+
+    expect(state.currentEntry).toBe('0')
+  })
+
   it('toggles the sign of the current entry', () => {
     const state = reduceActions([
       digit('4'),

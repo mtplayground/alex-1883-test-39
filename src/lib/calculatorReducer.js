@@ -5,6 +5,7 @@ export const CALCULATOR_ACTIONS = {
   INPUT_DECIMAL: 'INPUT_DECIMAL',
   CHOOSE_OPERATOR: 'CHOOSE_OPERATOR',
   CALCULATE: 'CALCULATE',
+  DELETE_LAST_DIGIT: 'DELETE_LAST_DIGIT',
   TOGGLE_SIGN: 'TOGGLE_SIGN',
   APPLY_PERCENT: 'APPLY_PERCENT',
   CLEAR: 'CLEAR',
@@ -124,6 +125,33 @@ function inputDecimal(state) {
   }
 }
 
+function deleteLastDigit(state) {
+  const baseState = clearError(state)
+
+  if (baseState.shouldReplaceEntry) {
+    return {
+      ...baseState,
+      currentEntry: '0',
+      shouldReplaceEntry: false,
+    }
+  }
+
+  if (
+    baseState.currentEntry.length === 1 ||
+    (baseState.currentEntry.length === 2 && baseState.currentEntry.startsWith('-'))
+  ) {
+    return {
+      ...baseState,
+      currentEntry: '0',
+    }
+  }
+
+  return {
+    ...baseState,
+    currentEntry: baseState.currentEntry.slice(0, -1),
+  }
+}
+
 function chooseOperator(state, operator) {
   if (!OPERATIONS[operator] || state.error) {
     return state
@@ -203,6 +231,8 @@ export function calculatorReducer(state, action) {
       return chooseOperator(state, action.operator)
     case CALCULATOR_ACTIONS.CALCULATE:
       return calculate(state)
+    case CALCULATOR_ACTIONS.DELETE_LAST_DIGIT:
+      return deleteLastDigit(state)
     case CALCULATOR_ACTIONS.TOGGLE_SIGN:
       return toggleSign(state)
     case CALCULATOR_ACTIONS.APPLY_PERCENT:
